@@ -50,6 +50,48 @@ class Sorting:
         sort(0, len(array)-1)
         return sortings
 
+
+    def mergesort(self, array):
+        '''
+        Function to sort array using MergeSort
+        '''
+        def sort(array, l, r, sortings):
+            mid = (l + r)//2
+            if l < r:
+                sort(array, l, mid, sortings)
+                sort(array, mid + 1, r, sortings)
+                sortings = merge(array, l, mid, mid + 1, r, sortings)
+            return sortings
+
+        def merge(array, x1, y1, x2, y2, sortings):
+            i = x1
+            j = x2
+            temp = []
+            while i <= y1 and j <= y2:
+                if array[i] < array[j]:
+                    temp.append(array[i])
+                    i += 1
+                else:
+                    temp.append(array[j])
+                    j += 1
+            while i <= y1:
+                temp.append(array[i])
+                i += 1
+            while j <= y2:
+                temp.append(array[j])
+                j += 1
+            j = 0
+            for i in range(x1, y2 + 1):
+                sortings.append(array[:])
+                array[i] = temp[j]
+                j += 1
+            sortings.append(array[:])
+            return sortings
+
+        sortings = []
+        return sort(array, 0, len(array)-1, sortings)
+
+
     def bubble_sort(self, array):
         '''
         Function to sort array using BubblSort
@@ -92,13 +134,13 @@ def random_array():
     Function to create a random unsorted array
     '''
     random_array = []
-    for _ in range(1, 100):
+    for _ in range(1, 5):
         random_array.append(random.randrange(100, 600))
-    print(random_array)
+    #print(random_array)
     return random_array
 
 def display_sorting_labels():
-    sortings = ['QuickSort', 'BubbleSort']
+    sortings = ['QuickSort', 'BubbleSort', 'MergeSort']
     sort_name_rect = []
     input_x, input_y = 10, 10
     for sort_name in sortings:
@@ -130,6 +172,10 @@ def gameloop():
                             is_sorting = True
                         elif name == 'BubbleSort':
                             sortings = sorting.bubble_sort(arr)
+                            is_sorting = True
+                        elif name == 'MergeSort':
+                            print('MergeSort')
+                            sortings = sorting.mergesort(arr)
                             is_sorting = True
             if event.type == pygame.QUIT:
                 pygame.quit()
