@@ -34,6 +34,7 @@ class Sorting:
             i = low-1
             pivot = array[high]
             for j in range(low, high):
+                sortings.append(array[:])
                 if array[j] < pivot:
                     i += 1
                     array[j], array[i] = array[i], array[j]
@@ -45,11 +46,44 @@ class Sorting:
             if low < high:
                 pi = partition(low, high)
                 sort(low, pi-1)
+                sortings.append(array[:])
                 sort(pi+1, high)
 
         sort(0, len(array)-1)
         return sortings
 
+    def selection_sort(self, array):
+        '''
+        Selection sort
+        '''
+        sortings = []
+        for i, _ in enumerate(array):
+            sortings.append(array[:])
+            min_index = i
+            for j in range(i+1, len(array)):
+                if array[j] < array[min_index]:
+                    min_index = j
+            array[min_index], array[i] = array[i], array[min_index]
+        print(len(sortings))
+        return sortings
+
+    def insertion_sort(self, array):
+        '''
+        Insertion sort
+        '''
+        sortings = []
+        for i in range(1, len(array)):
+            sortings.append(array[:])
+            key = array[i]
+            j = i-1
+            while j>=0 and array[j] > key:
+                sortings.append(array[:])
+                array[j+1] = array[j]
+                j -= 1
+            array[j+1] = key
+        sortings.append(array[:])
+        print(len(array))
+        return sortings
 
     def mergesort(self, array):
         '''
@@ -100,8 +134,10 @@ class Sorting:
         for i, _ in enumerate(array):
             for j in range(i+1, len(array)):
                 if array[i] > array[j]:
+                    sortings.append(array[:])
                     array[i], array[j] = array[j], array[i]
-            sortings.append(array[:])
+        print(len(sortings))
+        sortings.append(array[:])
         return sortings
 
 
@@ -116,7 +152,7 @@ def display_lines(sortings):
         gameWindow.fill(BLACK)
         draw_array(arr, color)
         pygame.display.update()
-        pygame.time.wait(100)
+        pygame.time.wait(10)
 
 def draw_array(arr, color):
     rect_x_start = 100
@@ -134,13 +170,13 @@ def random_array():
     Function to create a random unsorted array
     '''
     random_array = []
-    for _ in range(1, 5):
+    for _ in range(1, 100):
         random_array.append(random.randrange(100, 600))
     #print(random_array)
     return random_array
 
 def display_sorting_labels():
-    sortings = ['QuickSort', 'BubbleSort', 'MergeSort']
+    sortings = ['QuickSort', 'BubbleSort', 'MergeSort', 'InsertionSort', 'SelectionSort']
     sort_name_rect = []
     input_x, input_y = 10, 10
     for sort_name in sortings:
@@ -176,6 +212,12 @@ def gameloop():
                         elif name == 'MergeSort':
                             print('MergeSort')
                             sortings = sorting.mergesort(arr)
+                            is_sorting = True
+                        elif name == 'InsertionSort':
+                            sortings = sorting.insertion_sort(arr)
+                            is_sorting = True
+                        elif name == 'SelectionSort':
+                            sortings = sorting.selection_sort(arr)
                             is_sorting = True
             if event.type == pygame.QUIT:
                 pygame.quit()
