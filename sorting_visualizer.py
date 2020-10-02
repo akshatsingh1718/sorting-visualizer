@@ -155,10 +155,11 @@ def display_lines(sortings):
         pygame.time.wait(10)
 
 def draw_array(arr, color):
-    rect_x_start = 100
+    rect_x_start = 200
     rect_x, rect_y = rect_x_start, 100
     rect_width = 4
     rect_width_inc = rect_width+3
+    gameWindow.fill(BLACK)
     for _, num in enumerate(arr):
         rect = pygame.Rect(rect_x, rect_y, rect_width, num)
         pygame.draw.rect(gameWindow, color, rect, 0)
@@ -176,15 +177,15 @@ def random_array():
     return random_array
 
 def display_sorting_labels():
-    sortings = ['QuickSort', 'BubbleSort', 'MergeSort', 'InsertionSort', 'SelectionSort']
+    sortings = ['RandomArray', 'QuickSort', 'BubbleSort', 'MergeSort', 'InsertionSort', 'SelectionSort']
     sort_name_rect = []
-    input_x, input_y = 10, 10
+    input_x, input_y = 10, 100
     for sort_name in sortings:
         surface = font.render(sort_name, True, PINK)
         text_rect = pygame.Rect(input_x, input_y, surface.get_width()+10, 32)
         pygame.draw.rect(gameWindow, PURPLE, text_rect, 2)
         gameWindow.blit(surface, (text_rect.x+5, text_rect.y+5))
-        input_x += 10+ text_rect.w
+        input_y += 10+ text_rect.h
         sort_name_rect.append((text_rect, sort_name))
     return sort_name_rect
 
@@ -219,6 +220,9 @@ def gameloop():
                         elif name == 'SelectionSort':
                             sortings = sorting.selection_sort(arr)
                             is_sorting = True
+                        elif name == 'RandomArray':
+                            arr = random_array()
+                            draw_array(arr, GREEN)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
