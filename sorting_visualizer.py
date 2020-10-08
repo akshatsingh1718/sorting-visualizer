@@ -125,6 +125,65 @@ class Sorting:
         sortings = []
         return sort(array, 0, len(array)-1, sortings)
 
+    def tim_sort(self, array):
+        '''
+        Function to sort array using tim_sort
+        '''
+        def merge_sort(arr, l_start, l_end, r_start, r_end):
+            L = arr[l_start:l_end]
+            R = arr[r_start:r_end]
+            temp = []
+            i, j = 0, 0
+            while i < len(L) and j < len(R):
+                if L[i] < R[j]:
+                    temp.append(L[i])
+                    i += 1
+                else:
+                    temp.append(R[j])
+                    j += 1
+
+            while i < len(L):
+                temp.append(L[i])
+                i += 1
+            while j < len(R):
+                temp.append(R[j])
+                j += 1
+            j = 0
+
+            for i in range(l_start, r_end):
+                if j < len(temp):
+                    sortings.append(array[:])
+                    arr[i] = temp[j]
+                    j += 1
+                else:
+                    break
+            sortings.append(arr[:])
+
+        def insertion_sort(arr, start, end):
+            for t in range(start+1, end):
+                sortings.append(arr[:])
+                key = arr[t]
+                j = t-1
+                while j >= start and key < arr[j]:
+                    sortings.append(arr[:])
+                    arr[j+1] = arr[j]
+                    j -= 1
+                arr[j+1] = key
+
+        RUN = 5
+        sortings = []
+        n = len(array)
+        for i in range(0, n, RUN):
+            insertion_sort(array, i, min(i+RUN,n))
+        sortings.append([0]*11)
+        RUNinc = RUN
+        while RUNinc < len(array):
+            for i in range(0, len(array), RUNinc*2):
+                merge_sort(array, i, i+RUNinc, i+RUNinc, i+RUNinc*2)
+                sortings.append(array[:])
+            RUNinc = RUNinc*2
+        return sortings
+
 
     def bubble_sort(self, array):
         '''
@@ -172,12 +231,12 @@ def random_array():
     '''
     random_array = []
     for _ in range(1, 100):
-        random_array.append(random.randrange(100, 600))
+        random_array.append(random.randrange(250, 600))
     #print(random_array)
     return random_array
 
 def display_sorting_labels():
-    sortings = ['RandomArray', 'QuickSort', 'BubbleSort', 'MergeSort', 'InsertionSort', 'SelectionSort']
+    sortings = ['RandomArray', 'QuickSort', 'BubbleSort', 'MergeSort', 'InsertionSort', 'SelectionSort', 'TimSort']
     sort_name_rect = []
     input_x, input_y = 10, 100
     for sort_name in sortings:
@@ -223,6 +282,9 @@ def gameloop():
                         elif name == 'RandomArray':
                             arr = random_array()
                             draw_array(arr, GREEN)
+                        elif name == 'TimSort':
+                            sortings = sorting.tim_sort(arr)
+                            is_sorting = True
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
