@@ -181,7 +181,8 @@ class Sorting:
             for i in range(0, len(array), RUNinc*2):
                 merge_sort(array, i, i+RUNinc, i+RUNinc, i+RUNinc*2)
                 sortings.append(array[:])
-            RUNinc = RUNinc*2
+            RUNinc = RUNinc*3
+        print(len(sortings))
         return sortings
 
 
@@ -199,6 +200,43 @@ class Sorting:
         sortings.append(array[:])
         return sortings
 
+    def radix_sort(self, array):
+        '''
+        Function to sort using radix sort
+        '''
+        def counting_sort(arr, exp):
+            n = len(arr)
+            count = [0] * 10
+            output = [0] * n
+            for i in range(0, n):
+                index = arr[i]/exp
+                count[int(index%10)] += 1
+
+            for i in range(1, 10):
+                count[i] += count[i-1]
+
+            i = n-1
+            while i >= 0:
+                index = arr[i]/exp
+                output[count[int(index%10)]-1] = arr[i]
+                count[int(index % 10)] -= 1
+                i -= 1
+
+            for i in range(0, n):
+                sortings.append(arr[:])
+                arr[i] = output[i]
+
+        def sort(arr):
+            m = max(arr)
+            exp = 1
+            while m//exp > 0:
+                sortings.append(arr[:])
+                counting_sort(arr, exp)
+                exp *= 10
+            sortings.append(arr[:])
+        sortings = []
+        sort(array)
+        return sortings
 
 def display_lines(sortings):
     '''
@@ -236,7 +274,7 @@ def random_array():
     return random_array
 
 def display_sorting_labels():
-    sortings = ['RandomArray', 'QuickSort', 'BubbleSort', 'MergeSort', 'InsertionSort', 'SelectionSort', 'TimSort']
+    sortings = ['RandomArray', 'QuickSort', 'BubbleSort', 'MergeSort', 'InsertionSort', 'SelectionSort', 'TimSort', 'RadixSort']
     sort_name_rect = []
     input_x, input_y = 10, 100
     for sort_name in sortings:
@@ -284,6 +322,9 @@ def gameloop():
                             draw_array(arr, GREEN)
                         elif name == 'TimSort':
                             sortings = sorting.tim_sort(arr)
+                            is_sorting = True
+                        elif name == 'RadixSort':
+                            sortings = sorting.radix_sort(arr)
                             is_sorting = True
             if event.type == pygame.QUIT:
                 pygame.quit()
