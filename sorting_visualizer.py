@@ -181,7 +181,7 @@ class Sorting:
             for i in range(0, len(array), RUNinc*2):
                 merge_sort(array, i, i+RUNinc, i+RUNinc, i+RUNinc*2)
                 sortings.append(array[:])
-            RUNinc = RUNinc*3
+            RUNinc = RUNinc*2
         print(len(sortings))
         return sortings
 
@@ -202,7 +202,7 @@ class Sorting:
 
     def radix_sort(self, array):
         '''
-        Function to sort using radix sort
+        Function to sort radix sort
         '''
         def counting_sort(arr, exp):
             n = len(arr)
@@ -234,8 +234,11 @@ class Sorting:
                 counting_sort(arr, exp)
                 exp *= 10
             sortings.append(arr[:])
+        print('new', array)
         sortings = []
         sort(array)
+        print(len(sortings))
+        print(sortings[-1], array)
         return sortings
 
 def display_lines(sortings):
