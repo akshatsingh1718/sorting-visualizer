@@ -241,6 +241,38 @@ class Sorting:
         print(sortings[-1], array)
         return sortings
 
+
+    def cocktail_sort(self, array):
+        sortings = []
+        n = len(array)
+        start = 0
+        end = n-1
+        swapping = True
+        while swapping:
+            swapping = False
+            for i in range(start, end):
+                if array[i] > array[i+1]:
+                    sortings.append(array[:])
+                    array[i], array[i+1] = array[i+1], array[i]
+                    swapping = True
+
+            end -= 1
+
+            if not swapping:
+                break
+
+            swapping = False
+
+            for i in range(end-1, start-1, -1):
+                if array[i] > array[i+1]:
+                    sortings.append(array[:])
+                    array[i], array[i+1] = array[i+1], array[i]
+                    swapping = True
+
+            start += 1
+        return sortings
+
+
 def display_lines(sortings):
     '''
     Function to show lines as array elements to show visually
@@ -277,7 +309,7 @@ def random_array():
     return random_array
 
 def display_sorting_labels():
-    sortings = ['RandomArray', 'QuickSort', 'BubbleSort', 'MergeSort', 'InsertionSort', 'SelectionSort', 'TimSort', 'RadixSort']
+    sortings = ['RandomArray', 'QuickSort', 'BubbleSort', 'MergeSort', 'InsertionSort', 'SelectionSort', 'TimSort', 'RadixSort', 'CocktailSort']
     sort_name_rect = []
     input_x, input_y = 10, 100
     for sort_name in sortings:
@@ -328,6 +360,9 @@ def gameloop():
                             is_sorting = True
                         elif name == 'RadixSort':
                             sortings = sorting.radix_sort(arr)
+                            is_sorting = True
+                        elif name == 'CocktailSort':
+                            sortings = sorting.cocktail_sort(arr)
                             is_sorting = True
             if event.type == pygame.QUIT:
                 pygame.quit()
